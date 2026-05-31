@@ -1,7 +1,5 @@
 import sys
 
-!{sys.executable} -m pip install streamlit
-
 import streamlit as st
 
 import re
