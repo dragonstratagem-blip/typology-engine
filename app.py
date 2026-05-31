@@ -1,6 +1,3 @@
-!pip install streamlit
-
-
 import sys
 
 !{sys.executable} -m pip install streamlit
