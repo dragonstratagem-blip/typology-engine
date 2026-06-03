@@ -8,17 +8,23 @@ def apply_styles(letter, pol, mag_pol, mag_val, spol, smag, dof_val):
     fonts = {"4":"serif", "3":"sans-serif", "2":"fantasy", "1":"cursive", "0":"monospace"}
     style = [f"font-family: {fonts[dof_val]};"]
     
-    # Letter Polarity
-    if pol == "+": style.append("text-decoration: underline;")
-    elif pol == "-": style.append("text-decoration: line-through;")
+    # Letter Polarity: Only + or - allowed
+    if pol == "+": 
+        style.append("text-decoration: underline;")
+    elif pol == "-": 
+        style.append("text-decoration: line-through;")
     
-    # Magnitude Polarity/Value Logic
-    if mag_pol == "+": style.append("font-weight: bold;")
-    elif mag_pol == "-": style.append("font-style: italic;")
+    # Magnitude Polarity: Only apply if + or -
+    if mag_pol == "+": 
+        style.append("font-weight: bold;")
+    elif mag_pol == "-": 
+        style.append("font-style: italic;")
     
-    # Skill Polarity
-    if spol == "+": style.append("vertical-align: super; font-size: smaller;")
-    elif spol == "-": style.append("vertical-align: sub; font-size: smaller;")
+    # Skill Polarity: Only apply if + or -
+    if spol == "+": 
+        style.append("vertical-align: super; font-size: smaller;")
+    elif spol == "-": 
+        style.append("vertical-align: sub; font-size: smaller;")
     
     # Skill Magnitude
     colors = {"6":"purple", "5":"blue", "4":"green", "3":"yellow", "2":"orange", "1":"red"}
@@ -41,9 +47,10 @@ inputs = {}
 for i, col in enumerate(cols):
     with col:
         st.subheader(labels[i])
-        # Input Segregation
+        # Letter Polarity restricted to ["+", "-"]
         inputs[f"p{i}"] = st.selectbox(f"{labels[i]} Polarity", ["+", "-"], index=st.session_state.vals['data'][i][0])
-        inputs[f"mp{i}"] = st.selectbox(f"Mag Polarity", ["+", "-"], index=st.session_state.vals['data'][i][1])
+        # Influence Polarity includes " " (null)
+        inputs[f"mp{i}"] = st.selectbox(f"Mag Polarity", [" ", "+", "-"], index=st.session_state.vals['data'][i][1])
         inputs[f"mv{i}"] = st.selectbox(f"Mag Value", ["1", "2", "3"], index=st.session_state.vals['data'][i][2])
         inputs[f"sp{i}"] = st.selectbox(f"S-Pol", [" ", "+", "-"], index=st.session_state.vals['data'][i][3])
         inputs[f"sm{i}"] = st.selectbox(f"S-Mag", ["1", "2", "3", "4", "5", "6"], index=st.session_state.vals['data'][i][4])
@@ -51,9 +58,8 @@ for i, col in enumerate(cols):
 # --- Randomization ---
 if st.button("Randomize All"):
     st.session_state.vals['dof'] = random.randint(0, 4)
-    # Updated to 5 inputs per column
     st.session_state.vals['data'] = [
-        [random.randint(0,1), random.randint(0,1), random.randint(0,2), random.randint(0,2), random.randint(0,5)] 
+        [random.randint(0,1), random.randint(0,2), random.randint(0,2), random.randint(0,2), random.randint(0,5)] 
         for _ in range(4)
     ]
     st.rerun()
